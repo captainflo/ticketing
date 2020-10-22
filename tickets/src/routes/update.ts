@@ -5,6 +5,7 @@ import {
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
+  BadRequestError,
 } from '@fldevtickets/common';
 import { Ticket } from '../models/tickets';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-uptaded-publisher';
@@ -27,6 +28,10 @@ router.put(
 
     if (!ticket) {
       throw new NotFoundError();
+    }
+
+    if(ticket.orderId){
+      throw new BadRequestError('Ticket is reserved')
     }
 
     if (ticket.userId !== req.currentUser!.id) {
