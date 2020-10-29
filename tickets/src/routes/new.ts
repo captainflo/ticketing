@@ -12,7 +12,9 @@ router.post(
   requireAuth,
   [
     body('title').not().isEmpty().withMessage('Title is required'),
-    body('price').isFloat({ gt: 0 }).withMessage('Price is required'),
+    body('price')
+      .isFloat({ gt: 0 })
+      .withMessage('Price must be greater than 0'),
   ],
   validationRequest,
   async (req: Request, res: Response) => {
@@ -29,7 +31,7 @@ router.post(
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,
-      version: ticket.version
+      version: ticket.version,
     });
 
     res.status(201).send(ticket);
